@@ -1,29 +1,25 @@
+<div class="container mt-5" style="max-width: 600px;">
+    <h3 class="text-center mb-4"><b>Iniciar Sesión</b></h3>
 
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+            <label>Email:</label>
+            <input type="email" formControlName="emailUsuario" class="form-control" placeholder="Introduzca su correo"
+                required>
+        </div>
 
-<mat-card>
-    <mat-card-header>
-      <h2>Cuaderno de notas</h2>
-    </mat-card-header>
-    <mat-card-content>
-      <form #loginForm="ngForm" (submit)="login()">
-        <h4 class="card-title">Acceso</h4>
-        <mat-error *ngIf="!loginValid">
-          El usuario y contraseña no son correctos!.
-        </mat-error>
-        <mat-form-field>
-          <mat-label>Usuario</mat-label>
-          <input matInput placeholder="Usuario" [(ngModel)]="user" name="username" required>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Contraseña</mat-label>
-          <input matInput type="password" placeholder="Contraseña" [(ngModel)]="password" name="password"
-                 required>
-        </mat-form-field>
-        <button mat-raised-button color="primary" [disabled]="!loginForm.form.valid">Login</button>
-      </form>
-    </mat-card-content>
-  </mat-card>
-  
-  <footer>
-  
-  </footer>
+        <div class="mb-3">
+            <label>Contraseña:</label>
+            <input type="password" formControlName="passwordUsuario" class="form-control"
+                placeholder="Introduce la contraseña" required>
+        </div>
+
+        <button type="submit" class="btn btn-dark w-100" [disabled]="loginForm.invalid">Iniciar Sesión</button>
+        <a routerLink="/registro" class="redireccion d-block mt-2">¿Todavía no tienes cuenta?</a>
+        <a routerLink="/recuperar-password" class="redireccion d-block mt-1">¿No recuerdas la contraseña?</a>
+    </form>
+
+    <div *ngIf="errorMessage" class="text-center mt-3 text-danger">
+        {{ errorMessage }}
+    </div>
+</div>

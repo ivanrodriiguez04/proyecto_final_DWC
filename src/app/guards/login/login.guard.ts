@@ -1,19 +1,22 @@
-import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { map } from 'rxjs';
+import { inject } from '@angular/core';
+import { LoginService } from '../../servicios/login/login.service';
 
 export const loginGuard: CanActivateFn = (route, state) => {
-  const auth = inject(Auth);
+  const loginService = inject(LoginService);
   const router = inject(Router);
+  
+  const userRole = loginService.getUserRole();
 
-  return user(auth).pipe(
-    map(user => {
-      if(user) {
-        return true;
-      } else {
-        router.navigate(['/login']);
-        return false;
-      }
-    }),
-  );
+  if (userRole) {
+    // Si el usuario está autenticado, redirigirlo a su página correspondiente
+    if (userRole === 'administrador') {
+      router.navigate(['/administrador']);
+    } else {
+      router.navigate(['/cuentas']);
+    }
+    return false; // Bloquea el acceso a /login si el usuario ya está autenticado
+  }
+
+  return true; // Permite acceder al login si el usuario NO ha iniciado sesión
 };

@@ -1,43 +1,47 @@
-import { Component, inject } from '@angular/core';
-import { AuthService } from '../../servicios/autentificacion/auth.service';
-import { MatCard, MatCardContent, MatCardHeader } from '@angular/material/card';
-import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit} from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { LoginService } from '../../servicios/login/login.service';
 import { Router } from '@angular/router';
-import { NgIf } from '@angular/common';
-import { MatInput } from '@angular/material/input';
-import { MatButton } from '@angular/material/button';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    MatCard,
-    MatCardHeader,
-    MatCardContent,
-    MatError,
-    MatFormField,
-    FormsModule,
-    MatLabel,
-    NgIf,
-    MatInput,
-    MatButton
-  ],
+  imports: [],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
-  authService = inject(AuthService);
-  router = inject(Router);
-  user: string = '';
-  password: string = '';
-  loginValid: boolean = true;
-  year: number = new Date().getFullYear();
+export class LoginComponent implements OnInit {
+  loginForm!: FormGroup;
+  errorMessage: string = '';
 
-  login(): void {
-    this.authService.login(this.user, this.password).then(() => {
-      this.loginValid = true;
-      this.router.navigate(['notas']);
-    }).catch(() => this.loginValid = false);
+  constructor(
+    private fb: FormBuilder,
+    private loginService: LoginService,
+    private router: Router
+  ) {}
 
+  ngOnInit() {
+    this.loginForm = this.fb.group({
+      emailUsuario: ['', [Validators.required, Validators.email]],
+      passwordUsuario: ['', [Validators.required, Validators.minLength(6)]]
+    });
   }
+
+  onSubmit() {
+    if (this.loginForm.valid) {
+      this.loginService.login(this.loginForm.value).subscribe({
+        next: (role) => {
+          this.loginService.setUserRole(role);
+          if (role === 'administrador') {
+            this.router.navigate(['/administrador']);
+          } else {
+            this.router.navigate(['/cuentas']);
+          }
+        },
+        error: () => {
+          this.errorMessage = 'Usuario o contraseña incorrectos.';
+        }
+      });
+    }
+  }
+  
 }
