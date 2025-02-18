@@ -1,13 +1,16 @@
-import { Component, OnInit} from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoginService } from '../../servicios/login/login.service';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { HttpResponse } from '@angular/common/http';
+
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
@@ -22,26 +25,44 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.loginForm = this.fb.group({
       emailUsuario: ['', [Validators.required, Validators.email]],
-      passwordUsuario: ['', [Validators.required, Validators.minLength(6)]]
+      passwordUsuario: ['', [Validators.required]]
     });
   }
 
   onSubmit() {
     if (this.loginForm.valid) {
       this.loginService.login(this.loginForm.value).subscribe({
-        next: (role) => {
-          this.loginService.setUserRole(role);
-          if (role === 'administrador') {
-            this.router.navigate(['/administrador']);
+        next: (response) => {
+          console.log('Respuesta del servidor:', response); // Depuración
+  
+          const role = response.role.trim(); 
+          console.log('Rol obtenido:', role); // Depuración
+  
+          if (role) {
+            this.loginService.setUserRole(role);
+  
+            // If-else para manejar diferentes roles
+            if (role === 'admin') {
+              console.log('Redirigiendo a administrador');
+              this.router.navigate(['/administrador']);
+            } else if (role === 'usuario') {
+              console.log('Redirigiendo a cuentas');
+              this.router.navigate(['/cuentas']);
+            } else {
+              console.log('Rol desconocido, redirigiendo a inicio');
+              this.router.navigate(['/']);
+            }
           } else {
-            this.router.navigate(['/cuentas']);
+            this.errorMessage = 'Error obteniendo el rol del usuario.';
           }
         },
-        error: () => {
-          this.errorMessage = 'Usuario o contraseña incorrectos.';
+        error: (err) => {
+          console.error('Error en la autenticación:', err);
+          this.errorMessage = err.error || 'Error al iniciar sesión';
         }
       });
     }
   }
+  
   
 }

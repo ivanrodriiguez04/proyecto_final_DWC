@@ -9,14 +9,8 @@ export const loginGuard: CanActivateFn = (route, state) => {
   const userRole = loginService.getUserRole();
 
   if (userRole) {
-    // Si el usuario está autenticado, redirigirlo a su página correspondiente
-    if (userRole === 'administrador') {
-      router.navigate(['/administrador']);
-    } else {
-      router.navigate(['/cuentas']);
-    }
-    return false; // Bloquea el acceso a /login si el usuario ya está autenticado
+    router.navigate([userRole === 'admin' ? '/administrador' : '/cuentas']);
+    return false;
   }
-
-  return true; // Permite acceder al login si el usuario NO ha iniciado sesión
+  return true;
 };

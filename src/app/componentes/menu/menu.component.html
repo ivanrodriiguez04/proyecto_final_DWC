@@ -6,12 +6,12 @@
       <ng-container *ngIf="userRole; else notLoggedIn">
         <div class="dropdown">
           <a class="dropdown-toggle email-link" id="userDropdown" role="button" data-bs-toggle="dropdown">
-            {{ userRole === 'administrador' ? 'Administrador' : 'Cuentas' }}
+            {{ userRole === 'admin' ? 'Administrador' : 'usuario' }}
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
             <li>
-              <a routerLink="/cuentas" class="dropdown-item" *ngIf="userRole === 'cuentas'">Mis Cuentas</a>
-              <a routerLink="/administrador" class="dropdown-item" *ngIf="userRole === 'administrador'">Panel Admin</a>
+              <a routerLink="/cuentas" class="dropdown-item" *ngIf="userRole === 'usuario'">Mis Cuentas</a>
+              <a routerLink="/administrador" class="dropdown-item" *ngIf="userRole === 'admin'">Panel Admin</a>
             </li>
             <li><a class="dropdown-item" (click)="logout()">Cerrar Sesión</a></li>
           </ul>
