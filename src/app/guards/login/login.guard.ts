@@ -8,8 +8,8 @@ export const loginGuard: CanActivateFn = (route, state) => {
   
   const userRole = loginService.getUserRole();
 
-  if (userRole) {
-    router.navigate([userRole === 'admin' ? '/administrador' : '/cuentas']);
+  if (userRole==='admin') {
+    router.navigate(['/administrador']);
     return false;
   }
   return true;

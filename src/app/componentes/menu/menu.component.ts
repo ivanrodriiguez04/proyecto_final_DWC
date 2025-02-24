@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { LoginService } from '../../servicios/login/login.service';
 import { NgIf } from '@angular/common';
 
@@ -7,21 +7,23 @@ import { NgIf } from '@angular/common';
   selector: 'app-menu',
   templateUrl: './menu.component.html',
   standalone: true,
-  imports: [NgIf],
+  imports: [NgIf,RouterModule],
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent implements OnInit {
   userRole: string | null = null;
+  userEmail: string | null = null;
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(private loginService: LoginService) {}
 
-  ngOnInit() {
-    this.userRole = this.loginService.getUserRole();
+  ngOnInit(): void {
+    this.loginService.user$.subscribe(user => {
+      this.userRole = user.role;
+      this.userEmail = user.email;
+    });
   }
 
-  logout() {
+  logout(): void {
     this.loginService.logout();
-    this.userRole = null;
-    this.router.navigate(['/login']);
   }
 }
