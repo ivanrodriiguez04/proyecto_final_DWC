@@ -1,2 +1,51 @@
-<h1>HOLA MUNDO</h1>
-<h3>Este es el html del registro</h3>
+<div class="container Formulario" style="max-width: 800px;">
+    <h3 class="text-center mb-4"><b>Alta nueva cuenta</b></h3>
+  
+    <form [formGroup]="registroForm" (ngSubmit)="validarYEnviar()">
+        <div>
+          <label>Nombre Completo:</label>
+          <input type="text" formControlName="nombreCompletoUsuario" required>
+        </div>
+        <div>
+          <label>DNI:</label>
+          <input type="text" formControlName="dniUsuario" required>
+        </div>
+        <div>
+          <label>Teléfono:</label>
+          <input type="text" formControlName="telefonoUsuario" required>
+        </div>
+        <div>
+          <label>Email:</label>
+          <input type="email" formControlName="emailUsuario" required>
+        </div>
+        <div>
+          <label>Confirmar Email:</label>
+          <input type="email" formControlName="confirmEmailUsuario" required>
+        </div>
+        <div>
+          <label>Contraseña:</label>
+          <input type="password" formControlName="passwordUsuario" required>
+        </div>
+        <div>
+          <label>Confirmar Contraseña:</label>
+          <input type="password" formControlName="confirmPasswordUsuario" required>
+        </div>
+        <div>
+          <label>Foto DNI Frontal:</label>
+          <input type="file" (change)="onFileChange($event, 'fotoDniFrontalUsuario')" required>
+        </div>
+        <div>
+          <label>Foto DNI Trasero:</label>
+          <input type="file" (change)="onFileChange($event, 'fotoDniTraseroUsuario')" required>
+        </div>
+        <div>
+          <label>Foto Usuario:</label>
+          <input type="file" (change)="onFileChange($event, 'fotoUsuario')" required>
+        </div>
+        <button type="submit">Registrarse</button>
+        <div *ngIf="mensajeError">{{ mensajeError }}</div>
+      </form>
+  
+    <div id="result" class="text-center mt-3 text-danger"></div>
+  </div>
+  
