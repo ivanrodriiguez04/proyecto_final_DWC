@@ -6,7 +6,7 @@ import { NgIf } from '@angular/common';
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [NgIf,ReactiveFormsModule],
+  imports: [NgIf, ReactiveFormsModule],
   templateUrl: './registro.component.html',
   styleUrl: './registro.component.css'
 })
@@ -22,21 +22,8 @@ export class RegistroComponent {
       emailUsuario: ['', [Validators.required, Validators.email]],
       confirmEmailUsuario: ['', [Validators.required, Validators.email]],
       passwordUsuario: ['', Validators.required],
-      confirmPasswordUsuario: ['', Validators.required],
-      fotoDniFrontalUsuario: [null, Validators.required],
-      fotoDniTraseroUsuario: [null, Validators.required],
-      fotoUsuario: [null, Validators.required]
+      confirmPasswordUsuario: ['', Validators.required]
     });
-  }
-
-  onFileChange(event: any, controlName: string) {
-    const file = event.target.files[0]; // Obtiene el primer archivo seleccionado
-    if (file) {
-      this.registroForm.patchValue({
-        [controlName]: file
-      });
-      this.registroForm.get(controlName)?.updateValueAndValidity(); // Asegura que el control se actualice
-    }
   }
 
   validarYEnviar() {
@@ -60,18 +47,23 @@ export class RegistroComponent {
       return;
     }
 
-    const formData = new FormData();
-    Object.keys(this.registroForm.controls).forEach(key => {
-      formData.append(key, this.registroForm.get(key)?.value);
-    });
+    // Crear el objeto JSON con los datos correctos
+    const usuario = {
+      nombreCompletoUsuario: this.registroForm.get('nombreCompletoUsuario')?.value,
+      dniUsuario: this.registroForm.get('dniUsuario')?.value,
+      telefonoUsuario: this.registroForm.get('telefonoUsuario')?.value,
+      emailUsuario: this.registroForm.get('emailUsuario')?.value,
+      passwordUsuario: this.registroForm.get('passwordUsuario')?.value,
+      rolUsuario: 'usuario',  // Se mantiene fijo
+      confirmado: false       // Se mantiene fijo hasta confirmación
+    };
 
-    this.registroService.registrarUsuario(formData).subscribe(
+    this.registroService.registrarUsuario(usuario).subscribe(
       response => alert('Registro exitoso, revisa tu correo'),
       error => {
-        console.error('Error en el registro:', error); // Muestra el error en la consola para depuración
+        console.error('Error en el registro:', error);
         this.mensajeError = 'Error en el registro: ' + (error.error?.message || JSON.stringify(error.error));
       }
     );
-    
   }
 }
