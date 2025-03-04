@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { LoginService } from '../../servicios/login/login.service';
 import { NgIf } from '@angular/common';
@@ -13,6 +13,7 @@ import { NgIf } from '@angular/common';
 export class MenuComponent implements OnInit {
   userRole: string | null = null;
   userEmail: string | null = null;
+  router = inject(Router);
 
   constructor(private loginService: LoginService) {}
 
@@ -25,5 +26,6 @@ export class MenuComponent implements OnInit {
 
   logout(): void {
     this.loginService.logout();
+    this.router.navigate(['/login']);
   }
 }

@@ -5,12 +5,12 @@ import { LoginService } from '../../servicios/login/login.service';
 export const loginGuard: CanActivateFn = (route, state) => {
   const loginService = inject(LoginService);
   const router = inject(Router);
-  
   const userRole = loginService.getUserRole();
-
+  console.log(userRole);
   if (userRole==='admin') {
-    router.navigate(['/administrador']);
-    return false;
+    //router.navigate(['/administrador']);
+    return true;
   }
-  return true;
+  router.navigate(['/login']);
+  return false;
 };

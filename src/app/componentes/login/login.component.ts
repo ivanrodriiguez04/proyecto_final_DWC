@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule,RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -30,38 +30,42 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     if (this.loginForm.valid) {
+      this.errorMessage = ''; // Limpiar mensajes de error previos
+      console.log('🔵 Enviando credenciales:', this.loginForm.value);
+
       this.loginService.login(this.loginForm.value).subscribe({
         next: (response) => {
-          console.log('Respuesta del servidor:', response); // Depuración
-  
-          const role = response.role.trim(); 
-          console.log('Rol obtenido:', role); // Depuración
-  
-          if (role) {
-            this.loginService.setUserRole(role);
-  
-            // If-else para manejar diferentes roles
-            if (role === 'admin') {
-              console.log('Redirigiendo a administrador');
+          console.log('🟢 Respuesta del servidor:', response);
+
+          if (!response || typeof response !== 'object' || !response.role) {
+            this.errorMessage = 'Error en la respuesta del servidor.';
+            return;
+          }
+
+          const role = response.role.toString().trim().toLowerCase(); // Convertir a string, limpiar y normalizar
+          console.log('🔵 Rol obtenido:', role);
+
+          this.loginService.setUserRole(role);
+
+          switch (role) {
+            case 'admin':
+              console.log('🔵 Redirigiendo a /administrador');
               this.router.navigate(['/administrador']);
-            } else if (role === 'usuario') {
-              console.log('Redirigiendo a cuentas');
+              break;
+            case 'usuario':
+              console.log('🔵 Redirigiendo a /cuentas');
               this.router.navigate(['/cuentas']);
-            } else {
-              console.log('Rol desconocido, redirigiendo a inicio');
-              this.router.navigate(['/']);
-            }
-          } else {
-            this.errorMessage = 'Error obteniendo el rol del usuario.';
+              break;
+            default:
+              console.log('🟠 Rol desconocido, redirigiendo a /');
+              this.router.navigate(['']);
           }
         },
         error: (err) => {
-          console.error('Error en la autenticación:', err);
-          this.errorMessage = err.error || 'Error al iniciar sesión';
+          console.error('🔴 Error en la autenticación:', err);
+          this.errorMessage = err.error?.message || 'Error al iniciar sesión.';
         }
       });
     }
   }
-  
-  
 }

@@ -5,7 +5,7 @@
         <div class="mb-3">
             <label>Email:</label>
             <input type="email" formControlName="emailUsuario" class="form-control" placeholder="Introduzca su correo"
-                required>
+                required>  
         </div>
 
         <div class="mb-3">
@@ -19,7 +19,7 @@
         <a routerLink="/recuperar-password" class="redireccion d-block mt-1">¿No recuerdas la contraseña?</a>
     </form>
 
-    <div *ngIf="errorMessage" class="text-center mt-3 text-danger">
-        Hay un error
+    <div *ngIf="errorMessage" class="alert alert-danger text-center mt-3">
+        {{ errorMessage }}
     </div>
 </div>
