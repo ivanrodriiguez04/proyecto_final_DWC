@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RegistroService } from '../../servicios/registro/registro.service';
 import { NgIf } from '@angular/common';
+import { Router } from '@angular/router'; // Importar Router
 
 @Component({
   selector: 'app-registro',
@@ -14,7 +15,7 @@ export class RegistroComponent {
   registroForm: FormGroup;
   mensajeError: string = '';
 
-  constructor(private fb: FormBuilder, private registroService: RegistroService) {
+  constructor(private fb: FormBuilder, private registroService: RegistroService, private router: Router) { // Inyectar Router
     this.registroForm = this.fb.group({
       nombreCompletoUsuario: ['', Validators.required],
       dniUsuario: ['', Validators.required],
@@ -47,23 +48,25 @@ export class RegistroComponent {
       return;
     }
 
-    // Crear el objeto JSON con los datos correctos
     const usuario = {
       nombreCompletoUsuario: this.registroForm.get('nombreCompletoUsuario')?.value,
       dniUsuario: this.registroForm.get('dniUsuario')?.value,
       telefonoUsuario: this.registroForm.get('telefonoUsuario')?.value,
       emailUsuario: this.registroForm.get('emailUsuario')?.value,
       passwordUsuario: this.registroForm.get('passwordUsuario')?.value,
-      rolUsuario: 'usuario',  // Se mantiene fijo
-      confirmado: false       // Se mantiene fijo hasta confirmación
+      rolUsuario: 'usuario',
+      confirmado: false
     };
 
-    this.registroService.registrarUsuario(usuario).subscribe(
-      response => alert('Registro exitoso, revisa tu correo'),
-      error => {
+    this.registroService.registrarUsuario(usuario).subscribe({
+      next: (response) => {
+        alert(response.message); // Mostrar mensaje de confirmación
+        this.router.navigate(['/login']); // Redirigir al login
+      },
+      error: (error) => {
         console.error('Error en el registro:', error);
-        this.mensajeError = 'Error en el registro: ' + (error.error?.message || JSON.stringify(error.error));
+        this.mensajeError = 'Error en el registro: ' + (error.error?.message || 'Inténtalo nuevamente.');
       }
-    );
+    });
   }
 }

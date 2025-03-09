@@ -4,20 +4,23 @@
 
     <div class="d-flex">
       <ng-container *ngIf="userRole; else notLoggedIn">
-        <div class="dropdown">
-          <!-- 🔹 Solo se muestra el email -->
-          <a class="email-link dropdown-toggle" id="userDropdown" role="button">
-            {{ userEmail }}
-          </a>
-          <!-- 🔹 Se muestra el menú al pasar el cursor -->
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-            <li>
-              <a routerLink="/cuentas" class="dropdown-item" *ngIf="userRole === 'usuario'">Mis Cuentas</a>
-              <a routerLink="/administrador" class="dropdown-item" *ngIf="userRole === 'admin'">Panel Admin</a>
-            </li>
-            <li><a class="dropdown-item" (click)="logout()">Cerrar Sesión</a></li>
-          </ul>
-        </div>
+        <!-- 🔹 Ahora se usa un botón en lugar de solo texto -->
+        <button 
+          mat-button 
+          [matMenuTriggerFor]="userMenu" 
+          #menuTrigger="matMenuTrigger"
+          (mouseenter)="openMenu(menuTrigger)"
+        >
+          {{ userEmail }}
+        </button>
+
+        <!-- 🔹 Menú desplegable -->
+        <mat-menu 
+          #userMenu="matMenu"
+          (mouseenter)="cancelClose()"
+          (mouseleave)="scheduleClose(menuTrigger)"
+        > <button mat-menu-item (click)="logout()">Cerrar Sesión</button>
+        </mat-menu>
       </ng-container>
 
       <ng-template #notLoggedIn>
@@ -27,3 +30,4 @@
     </div>
   </div>
 </nav>
+
