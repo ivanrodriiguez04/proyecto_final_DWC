@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CuentasService } from '../../servicios/cuentas/cuentas.service';
+import { Router, RouterModule } from '@angular/router';
 import { LoginService } from '../../servicios/login/login.service';
-import { RouterModule } from '@angular/router';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-cuentas',
@@ -17,40 +19,58 @@ import { MatIconModule } from '@angular/material/icon';
     MatButtonModule,
     RouterModule,
     MatCardModule,
-    MatIconModule
+    MatIconModule,
+    MatDialogModule,
+    ConfirmDialogComponent,
   ],
   templateUrl: './cuentas.component.html',
   styleUrls: ['./cuentas.component.css']
 })
 export class CuentasComponent implements OnInit {
   cuentas: any[] = [];
+  emailUsuario: string | null = null;
 
   constructor(
     private cuentasService: CuentasService,
-    private loginService: LoginService
+    private router: Router,
+    private loginService: LoginService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    this.cargarCuentas();
-  }
-
-  cargarCuentas(): void {
-    const email = this.loginService.getUserEmail();
-    if (!email) {
-      console.error('No se encontró el correo del usuario logueado.');
-      return;
-    }
-
-    this.cuentasService.obtenerCuentasPorEmail(email).subscribe({
-      next: (data) => this.cuentas = data,
-      error: (err) => console.error('Error al obtener cuentas', err),
+    this.loginService.user$.subscribe(user => {
+      this.emailUsuario = user.email;
+      if (this.emailUsuario) {
+        this.cargarCuentas();
+      }
     });
   }
 
+  cargarCuentas(): void {
+    if (this.emailUsuario) {
+      this.cuentasService.obtenerCuentasPorEmail(this.emailUsuario).subscribe({
+        next: (cuentas) => this.cuentas = cuentas,
+        error: (err) => console.error('Error al obtener cuentas', err),
+      });
+    }
+  }
+
   eliminarCuenta(idCuenta: number): void {
-    this.cuentasService.eliminarCuenta(idCuenta).subscribe({
-      next: () => this.cargarCuentas(),
-      error: (err) => console.error('Error al eliminar cuenta', err),
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '300px',
+      data: {
+        title: '¿Eliminar cuenta?',
+        message: '¿Estás seguro de que deseas eliminar esta cuenta?',
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.cuentasService.eliminarCuenta(idCuenta).subscribe({
+          next: () => this.cargarCuentas(),
+          error: (err) => console.error('Error al eliminar cuenta', err),
+        });
+      }
     });
   }
 }

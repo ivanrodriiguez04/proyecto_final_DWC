@@ -1,16 +1,15 @@
-.container {
-    padding: 24px;
-  }
-  
-  .cuentas-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin-top: 20px;
-  }
-  
-  .cuenta-card {
-    width: 300px;
-    padding: 10px;
-  }
-  
+.cuentas-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.cuenta-card {
+  margin-top: 16px;
+}
+
+mat-card {
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
