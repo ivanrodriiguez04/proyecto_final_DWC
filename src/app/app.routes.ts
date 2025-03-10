@@ -8,6 +8,7 @@ import { usuarioGuard } from './guards/usuario/usuario.guard';
 import { HomeComponent } from './componentes/home/home.component';
 import { RecuperarPasswordComponent } from './componentes/recuperar-password/recuperar-password.component';
 import { CambiarPasswordComponent } from './componentes/cambiar-password/cambiar-password.component';
+import { CrearCuentaComponent } from './componentes/crear-cuenta/crear-cuenta.component';
 
 export const routes: Routes = [
     {path:'',component:HomeComponent},
@@ -17,5 +18,6 @@ export const routes: Routes = [
     { path: 'administrador', component: AdministradorComponent, canActivate: [loginGuard]},
     { path: 'recuperar-password', component: RecuperarPasswordComponent },
     { path: 'cambiar-password', component: CambiarPasswordComponent },
+    { path: 'cuentas/crear', component: CrearCuentaComponent },
     { path: '**', redirectTo: '' }
 ];

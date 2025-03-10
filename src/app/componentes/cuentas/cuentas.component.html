@@ -1,1 +1,21 @@
-<p>cuentas works!</p>
+<div class="container">
+    <h2>Tus Cuentas</h2>
+  
+    <button mat-raised-button color="primary" routerLink="/cuentas/crear">
+      Crear Nueva Cuenta
+    </button>
+  
+    <mat-list *ngIf="cuentas.length > 0; else sinCuentas">
+      <mat-list-item *ngFor="let cuenta of cuentas">
+        <div mat-line><strong>{{ cuenta.nombreCuenta }}</strong></div>
+        <div mat-line>Tipo: {{ cuenta.tipoCuenta }}</div>
+        <div mat-line>IBAN: {{ cuenta.ibanCuenta }}</div>
+        <div mat-line>Saldo: {{ cuenta.dineroCuenta | currency }}</div>
+      </mat-list-item>
+    </mat-list>
+  
+    <ng-template #sinCuentas>
+      <p>No tienes cuentas registradas.</p>
+    </ng-template>
+  </div>
+  

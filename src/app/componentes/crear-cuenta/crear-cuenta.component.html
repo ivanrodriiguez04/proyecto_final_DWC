@@ -1,0 +1,22 @@
+<div class="form-container">
+    <h2>Crear Cuenta</h2>
+    <form (ngSubmit)="crearCuenta()" [formGroup]="cuentaForm">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nombre de la cuenta</mat-label>
+        <input matInput formControlName="nombreCuenta" required>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Tipo de cuenta</mat-label>
+        <mat-select formControlName="tipoCuenta" required>
+          <mat-option value="Ahorro">Ahorro</mat-option>
+          <mat-option value="Corriente">Corriente</mat-option>
+        </mat-select>
+      </mat-form-field>
+  
+      <button mat-raised-button color="primary" type="submit" [disabled]="cuentaForm.invalid">
+        Crear
+      </button>
+    </form>
+  </div>
+  
