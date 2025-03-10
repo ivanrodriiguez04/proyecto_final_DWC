@@ -1,4 +1,4 @@
-<div class="container mt-5" style="max-width: 600px;">
+<div class="container-login mt-5">
     <h3 class="text-center mb-4"><b>Iniciar Sesión</b></h3>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
@@ -14,9 +14,9 @@
                 placeholder="Introduce la contraseña" required>
         </div>
 
-        <button type="submit" class="btn btn-dark w-100" [disabled]="loginForm.invalid">Iniciar Sesión</button>
-        <a routerLink="/registro" class="redireccion d-block mt-2">¿Todavía no tienes cuenta?</a>
-        <a routerLink="/recuperar-password" class="redireccion d-block mt-1">¿No recuerdas la contraseña?</a>
+        <button type="submit" class="btn btn-dark" [disabled]="loginForm.invalid">Iniciar Sesión</button>
+        <a routerLink="/registro" class="redireccion">¿Todavía no tienes cuenta?</a>
+        <a routerLink="/recuperar-password" class="redireccion">¿No recuerdas la contraseña?</a>
     </form>
 
     <div *ngIf="errorMessage" class="alert alert-danger text-center mt-3">

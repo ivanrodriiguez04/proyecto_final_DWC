@@ -4,31 +4,31 @@
   <form [formGroup]="registroForm" (ngSubmit)="validarYEnviar()">
     <div>
       <label>Nombre Completo:</label>
-      <input type="text" formControlName="nombreCompletoUsuario" required>
+      <input type="text" formControlName="nombreCompletoUsuario" placeholder="Introduce tu nombre completo" required>
     </div>
     <div>
       <label>DNI:</label>
-      <input type="text" formControlName="dniUsuario" required>
+      <input type="text" formControlName="dniUsuario" placeholder="Introduce tu DNI" required>
     </div>
     <div>
       <label>Teléfono:</label>
-      <input type="text" formControlName="telefonoUsuario" required>
+      <input type="text" formControlName="telefonoUsuario" placeholder="Introduce tu número telefónico" required>
     </div>
     <div>
       <label>Email:</label>
-      <input type="email" formControlName="emailUsuario" required>
+      <input type="email" formControlName="emailUsuario" placeholder="Introduce tu correo electrónico" required>
     </div>
     <div>
       <label>Confirmar Email:</label>
-      <input type="email" formControlName="confirmEmailUsuario" required>
+      <input type="email" formControlName="confirmEmailUsuario" placeholder="Vuelve a introdrucir tu correo electrónico" required>
     </div>
     <div>
       <label>Contraseña:</label>
-      <input type="password" formControlName="passwordUsuario" required>
+      <input type="password" formControlName="passwordUsuario" placeholder="Introduce tu contraseña" required>
     </div>
     <div>
       <label>Confirmar Contraseña:</label>
-      <input type="password" formControlName="confirmPasswordUsuario" required>
+      <input type="password" formControlName="confirmPasswordUsuario" placeholder="Vuelve a introducir tu contraseña" required>
     </div>
 
     <!-- Campos ocultos para rol y confirmado -->
