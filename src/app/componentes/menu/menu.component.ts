@@ -22,14 +22,21 @@ export class MenuComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginService.user$.subscribe(user => {
-      this.userRole = user.role;
-      this.userEmail = user.email;
+      if (user) {
+        this.userRole = user.role;
+        this.userEmail = user.email;
+      } else {
+        this.userRole = null;
+        this.userEmail = null;
+      }
     });
   }
 
   logout(): void {
     this.loginService.logout();
-    this.router.navigate(['/login']);
+    this.userRole = null;
+    this.userEmail = null;
+    this.router.navigate(['']);
   }
 
   openMenu(menuTrigger: MatMenuTrigger): void {

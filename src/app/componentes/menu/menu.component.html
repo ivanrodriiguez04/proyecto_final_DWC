@@ -4,7 +4,7 @@
 
     <div class="d-flex">
       <ng-container *ngIf="userRole; else notLoggedIn">
-        <!-- 🔹 Ahora se usa un botón en lugar de solo texto -->
+        <!-- 🔹 Botón de usuario con menú desplegable -->
         <button 
           mat-button 
           [matMenuTriggerFor]="userMenu" 
@@ -19,10 +19,21 @@
           #userMenu="matMenu"
           (mouseenter)="cancelClose()"
           (mouseleave)="scheduleClose(menuTrigger)"
-        > <button mat-menu-item (click)="logout()">Cerrar Sesión</button>
+        >
+          <!-- 🔹 Opción dinámica basada en el rol -->
+          <button *ngIf="userRole === 'admin'" mat-menu-item routerLink="/administrador">
+            Panel Administrador
+          </button>
+
+          <button *ngIf="userRole === 'usuario'" mat-menu-item routerLink="/cuentas">
+            Mis Cuentas
+          </button>
+          <!-- 🔹 Opción común para cerrar sesión -->
+          <button mat-menu-item (click)="logout()">Cerrar Sesión</button>
         </mat-menu>
       </ng-container>
 
+      <!-- 🔹 Si el usuario no está autenticado -->
       <ng-template #notLoggedIn>
         <a routerLink="/registro" class="btn hazteCliente">Hazte cliente</a>
         <a routerLink="/login" class="btn login-btn">Login</a>
