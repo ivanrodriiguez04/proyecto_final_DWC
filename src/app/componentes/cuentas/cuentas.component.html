@@ -1,21 +1,27 @@
 <div class="container">
-    <h2>Tus Cuentas</h2>
-  
-    <button mat-raised-button color="primary" routerLink="/cuentas/crear">
-      Crear Nueva Cuenta
-    </button>
-  
-    <mat-list *ngIf="cuentas.length > 0; else sinCuentas">
-      <mat-list-item *ngFor="let cuenta of cuentas">
-        <div mat-line><strong>{{ cuenta.nombreCuenta }}</strong></div>
-        <div mat-line>Tipo: {{ cuenta.tipoCuenta }}</div>
-        <div mat-line>IBAN: {{ cuenta.ibanCuenta }}</div>
-        <div mat-line>Saldo: {{ cuenta.dineroCuenta | currency }}</div>
-      </mat-list-item>
-    </mat-list>
-  
-    <ng-template #sinCuentas>
-      <p>No tienes cuentas registradas.</p>
-    </ng-template>
+  <h2>Tus Cuentas</h2>
+
+  <button mat-raised-button color="primary" routerLink="/cuentas/crear">
+    Crear Nueva Cuenta
+  </button>
+
+  <div class="cuentas-list">
+    <mat-card *ngFor="let cuenta of cuentas" class="cuenta-card">
+      <mat-card-title>{{ cuenta.nombreCuenta }}</mat-card-title>
+      <mat-card-content>
+        <p><strong>Tipo:</strong> {{ cuenta.tipoCuenta }}</p>
+        <p><strong>IBAN:</strong> {{ cuenta.ibanCuenta }}</p>
+        <p><strong>Saldo:</strong> {{ cuenta.dineroCuenta | currency:'EUR' }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-icon-button color="warn" (click)="eliminarCuenta(cuenta.idCuenta)" aria-label="Eliminar cuenta">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
   </div>
-  
+
+  <ng-template #sinCuentas>
+    <p>No tienes cuentas registradas.</p>
+  </ng-template>
+</div>

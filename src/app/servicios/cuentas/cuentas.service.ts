@@ -14,4 +14,8 @@ export class CuentasService {
   crearCuenta(cuenta: any) {
     return this.http.post(`${this.apiUrl}/crear`, cuenta);
   }
+  eliminarCuenta(idCuenta: number) {
+    return this.http.delete(`http://localhost:8081/api/cuentas/eliminar/${idCuenta}`);
+  }
+  
 }
